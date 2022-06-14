@@ -3,6 +3,7 @@
 use std::{collections::HashMap, fmt::Display, str::FromStr};
 
 use serde::Deserialize;
+use serde_with::serde_as;
 use snafu::prelude::*;
 
 use crate::ws::message::{Message, SN};
@@ -213,4 +214,282 @@ impl Display for GatewayURLInfo {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         self.url().fmt(f)
     }
+}
+
+/// data type for api /guild/list
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GuildListData {
+    /// items
+    pub items: Vec< GuildListItem>,
+    /// meta
+    pub meta: GuildListMeta,
+    /// sort
+    pub sort: GuildSort,
+}
+
+/// data.items type for api /guild/list
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[serde_as]
+#[serde(rename_all = "camelCase")]
+pub struct  GuildListItem {
+    /// id
+    pub id: String,
+    /// name
+    pub name: String,
+    /// topic
+    pub topic: String,
+    /// master_id
+    #[serde(rename = "master_id")]
+    pub master_id: String,
+    /// icon
+    pub icon: String,
+    /// notify_type
+    #[serde(rename = "notify_type")]
+    pub notify_type: i64,
+    /// region
+    pub region: String,
+    /// enable_open
+    #[serde(rename = "enable_open")]
+    pub enable_open: bool,
+    /// open_id
+    #[serde(rename = "open_id")]
+    pub open_id: String,
+    /// default_channel_id
+    #[serde(rename = "default_channel_id")]
+    pub default_channel_id: String,
+    /// welcome_channel_id
+    #[serde(rename = "welcome_channel_id")]
+    pub welcome_channel_id: String,
+    /// boost_num
+    #[serde(rename = "boost_num")]
+    #[serde_as(deserialize_as = "DefaultOnError")]
+    #[serde(default)]
+    pub boost_num: i64,
+    /// level
+    #[serde_as(deserialize_as = "DefaultOnError")]
+    #[serde(default)]
+    pub level: i64,
+}
+
+/// data.meta type for api /guild/list
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct  GuildListMeta {
+    /// page
+    pub page: i64,
+    /// page_total
+    #[serde(rename = "page_total")]
+    pub page_total: i64,
+    /// page_size
+    #[serde(rename = "page_size")]
+    pub page_size: i64,
+    /// total
+    pub total: i64,
+}
+
+/// data.sort type for api /guild/list
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[serde_as]
+#[serde(rename_all = "camelCase")]
+pub struct GuildSort {
+    /// id
+    #[serde_as(deserialize_as = "DefaultOnError")]
+    #[serde(default)]
+    pub id: i64,
+}
+
+/// data type for api /guild/view
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GuildViewData {
+    /// roles
+    pub roles: Vec<GuildViewRole>,
+    /// chanels
+    pub channels: Vec<GuildViewChannel>,
+    /// id
+    pub id: String,
+    /// name
+    pub name: String,
+    /// topic
+    pub topic: String,
+    /// master_id
+    #[serde(rename = "master_id")]
+    pub master_id: String,
+    /// icon
+    pub icon: String,
+    #[serde(rename = "notify_type")]
+    /// notify_type
+    pub notify_type: i64,
+    /// region
+    pub region: String,
+    /// enable_open
+    #[serde(rename = "enable_open")]
+    pub enable_open: bool,
+    /// open_id
+    #[serde(rename = "open_id")]
+    pub open_id: String,
+    /// default_channel_id
+    #[serde(rename = "default_channel_id")]
+    pub default_channel_id: String,
+    /// welcome_channel_id
+    #[serde(rename = "welcome_channel_id")]
+    pub welcome_channel_id: String,
+    /// boost_num
+    #[serde(rename = "boost_num")]
+    pub boost_num: i64,
+    /// level
+    pub level: i64,
+}
+
+/// data.role type for api /guild/view
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GuildViewRole {
+    /// role_id
+    #[serde(rename = "role_id")]
+    pub role_id: i64,
+    /// name
+    pub name: String,
+    /// color
+    pub color: i64,
+    /// position
+    pub position: i64,
+    /// hoist
+    pub hoist: i64,
+    /// mentionable
+    pub mentionable: i64,
+    /// permissions
+    pub permissions: i64,
+}
+
+/// data.channel type for api /guild/view
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GuildViewChannel {
+    /// id
+    pub id: String,
+    /// guild_id
+    #[serde(rename = "guild_id")]
+    pub guild_id: String,
+    /// master_id
+    #[serde(rename = "master_id")]
+    pub master_id: String,
+    /// parent_id
+    #[serde(rename = "parent_id")]
+    pub parent_id: String,
+    /// name
+    pub name: String,
+    /// topic
+    pub topic: String,
+    /// type
+    #[serde(rename = "type")]
+    pub type_field: i64,
+    /// level
+    pub level: i64,
+    /// slow_mode
+    #[serde(rename = "slow_mode")]
+    pub slow_mode: i64,
+    /// is_category
+    #[serde(rename = "is_category")]
+    pub is_category: bool,
+}
+
+/// data type for api /guild/user-list
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GuildListUserData {
+    /// items
+    pub items: Vec<GuildListUserItem>,
+    /// meta
+    pub meta: GuildListUserMeta,
+    /// sort 
+    pub sort: GuildSort,
+    /// user_count 
+    #[serde(rename = "user_count")]
+    pub user_count: i64,
+    /// online_count
+    #[serde(rename = "online_count")]
+    pub online_count: i64,
+    /// offline_count
+    #[serde(rename = "offline_count")]
+    pub offline_count: i64,
+}
+
+/// data.item type for api /guild/user-list
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GuildListUserItem {
+    /// id
+    pub id: String,
+    /// username
+    pub username: String,
+    /// identify_num
+    #[serde(rename = "identify_num")]
+    pub identify_num: String,
+    /// online
+    pub online: bool,
+    /// status
+    pub status: i64,
+    /// bot
+    pub bot: bool,
+    /// avatar
+    pub avatar: String,
+    /// vip_avatar
+    #[serde(rename = "vip_avatar")]
+    pub vip_avatar: String,
+    /// nickname
+    pub nickname: String,
+    /// roles
+    pub roles: Vec<i64>,
+}
+
+/// data.meta type for api /guild/user-list
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GuildListUserMeta {
+    /// page
+    pub page: i64,
+    /// page_total
+    #[serde(rename = "page_total")]
+    pub page_total: i64,
+    /// page_size
+    #[serde(rename = "page_size")]
+    pub page_size: i64,
+    /// total
+    pub total: i64,
+}
+
+/// data type for api /guild-mute/list
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GuildMuteListData {
+    /// mic
+    pub mic: GuildMuteListMic,
+    /// headset
+    pub headset: GuildMuteListHeadset,
+}
+
+/// data.mic type for api /guild-mute/list
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GuildMuteListMic {
+    /// type
+    #[serde(rename = "type")]
+    pub type_field: i64,
+    /// user_ids
+    #[serde(rename = "user_ids")]
+    pub user_ids: Vec<String>,
+}
+
+/// data.headset type for api /guild-mute/list
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GuildMuteListHeadset {
+    /// type
+    #[serde(rename = "type")]
+    pub type_field: i64,
+    /// user_ids
+    #[serde(rename = "user_ids")]
+    pub user_ids: Vec<String>,
 }

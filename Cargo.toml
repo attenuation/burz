@@ -73,6 +73,11 @@ features = ["simd"]
 [dependencies.log]
 version = "0.4"
 
+[dependencies.serde_with]
+version = "1.14.0"
+
+[dependencies.async-stream]
+version = "0.3.3"
 # ===== Dev Dependencies =====
 
 [dev-dependencies.tokio]
